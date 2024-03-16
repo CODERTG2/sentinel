@@ -5,28 +5,25 @@ token = "MTIxODMxMTQ2NzExMjA3NTM3NQ.G1PQG_.nQmH72Gz26v0J_9mzj3OOTz8AWgxP7AHs8TxA
 
 prefix = '$'
 
-intents = discord.Intents.all()
-client = commands.Bot(command_prefix=prefix, intents=intents)
+client = commands.Bot(command_prefix=prefix, intents=discord.Intents.all())
 client.remove_command("help")
 client.command_prefix = prefix
 
 
 @client.event
 async def on_ready():
-    guild_count = 0
-
-    for guild in client.guilds:
-        print(f"- {guild.id} (name: {guild.name})")
-
-        guild_count = guild_count + 1
-
-    print("SampleDiscordBot is in " + str(guild_count) + " guilds.")
+    print("Bot Connected")  # Alert to notify login of bot
 
 
-@client.event
-async def on_message(message):
-    if message.content == "hello":
-        await message.channel.send("hey dirtbag")
+@client.command()
+async def current(ctx, arg):
+    await ctx.send("it works")
+    if arg == "pit":
+        await ctx.send("pit")
+    if arg == "match":
+        await ctx.send("match")
+    else:
+        await ctx.send("INCORRECT!")
 
 
 client.run(token)
