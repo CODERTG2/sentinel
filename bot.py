@@ -17,13 +17,11 @@ async def on_ready():
 
 @client.command()
 async def current(ctx, arg):
-    await ctx.send("it works")
+    # await ctx.send("it works")
     if arg == "pit":
         await ctx.send("pit")
     if arg == "match":
         await ctx.send("match")
-    else:
-        await ctx.send("INCORRECT!")
 
 
 client.run(token)
