@@ -33,22 +33,23 @@ async def get_teams(ctx):
             teamNumberList = []
 
             for char in list(teamNumber):
-                teamNumberList.append(char)
-
                 if char == '/':
                     break
+                teamNumberList.append(char)
+                print(teamNumberList)
+
+            teamNumber = ""
 
             for number in teamNumberList:
                 teamNumber += number
             teamNumber = int(teamNumber)
 
-            print(teamNumber)
 
-            teamName = team.replace(f'<a href="/team/{int(teamNumber)}/2024">{int(teamNumber)}<br/>', '')
-            teamName = team.replace('</a>', '')
+            replaceString = f'<a href="/team/{teamNumber}/2024">{teamNumber}<br/>'
+            teamName = team.replace(replaceString, '')
+            teamName = teamName.replace('</a>', '')
             teams[teamNumber] = teamName
 
-        print(teams)
         await ctx.send("pitSoup.prettify()")
 
 
