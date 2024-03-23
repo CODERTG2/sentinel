@@ -20,16 +20,16 @@ async def on_ready():
 
 @client.command()
 async def get_teams(ctx):
-        URL = "https://www.thebluealliance.com/event/" + "2024wimi" + "#teams"
-        pitResponse = requests.get(URL, headers={"X-TBA-Auth-Key": tokens.blueAllianceToken})
-        pitSoup = BeautifulSoup(pitResponse.text, "html.parser", parse_only=SoupStrainer('div', class_='team-name'))
-        teamsList = pitSoup.find_all('a')
+    url = "https://www.thebluealliance.com/event/" + "2024wimi" + "#teams"
+    pit_response = requests.get(url, headers={"X-TBA-Auth-Key": tokens.blueAllianceToken})
+    pit_soup = BeautifulSoup(pit_response.text, "html.parser", parse_only=SoupStrainer('div', class_='team-name'))
+    teams_list = pit_soup.find_all('a')
 
-        teams = {
-            int(re.search(r'/team/(\d+)/', str(team)).group(1)): re.search(r'>(\d+)<br/>(.*)</a>', str(team)).group(2)
-            for team in teamsList}
+    teams = {
+        int(re.search(r'/team/(\d+)/', str(team)).group(1)): re.search(r'>(\d+)<br/>(.*)</a>', str(team)).group(2)
+        for team in teams_list}
 
-        await ctx.send(teams)
+    await ctx.send(teams)
 
 
 @client.command
