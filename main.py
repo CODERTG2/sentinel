@@ -2,6 +2,7 @@ import discord
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
 from discord.ext import commands
+import re
 
 import tokens
 
@@ -24,33 +25,11 @@ async def get_teams(ctx):
         pitSoup = BeautifulSoup(pitResponse.text, "html.parser", parse_only=SoupStrainer('div', class_='team-name'))
         teamsList = pitSoup.find_all('a')
 
-        teams = {}
+        teams = {
+            int(re.search(r'/team/(\d+)/', str(team)).group(1)): re.search(r'>(\d+)<br/>(.*)</a>', str(team)).group(2)
+            for team in teamsList}
 
-        for team in teamsList:
-            # hardcoded for the first term. something like this is needed.
-            team = str(team)
-            teamNumber = team.replace('<a href="/team/', '')
-            teamNumberList = []
-
-            for char in list(teamNumber):
-                if char == '/':
-                    break
-                teamNumberList.append(char)
-                print(teamNumberList)
-
-            teamNumber = ""
-
-            for number in teamNumberList:
-                teamNumber += number
-            teamNumber = int(teamNumber)
-
-
-            replaceString = f'<a href="/team/{teamNumber}/2024">{teamNumber}<br/>'
-            teamName = team.replace(replaceString, '')
-            teamName = teamName.replace('</a>', '')
-            teams[teamNumber] = teamName
-
-        await ctx.send("pitSoup.prettify()")
+        await ctx.send(teams)
 
 
 @client.command
