@@ -5,6 +5,7 @@ from discord.ext import commands
 import re
 
 import tokens
+from MyEmbed import MyEmbed
 
 prefix = '$'
 
@@ -39,7 +40,7 @@ async def scouters(ctx, arg):
 async def get_teams(ctx):
     team_items = list(teams.items())
     for i in range(0, len(team_items), 25):
-        send_embed = discord.Embed(title=f"Teams at {comp_code}", description="List of teams", color=0xeabfff)
+        send_embed = MyEmbed(title=f"Teams at {comp_code}", description="List of teams")
         for team_number, team_name in team_items[i:i + 25]:
             if len(team_name) > 1024:
                 team_name = team_name[:1021] + "..."
