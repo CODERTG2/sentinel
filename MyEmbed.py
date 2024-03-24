@@ -7,4 +7,4 @@ class MyEmbed(discord.Embed):
                          description=description,
                          color=0xeabfff,
                          **kwargs)
-        self.set_image(url="assets/4787logo.png")
+        # self.set_image(url="assets/Axiom_Logo.png")

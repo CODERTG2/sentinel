@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands
 
-import tokens
+import constants
 
 
 
