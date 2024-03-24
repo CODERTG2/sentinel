@@ -20,10 +20,9 @@ pit_soup = BeautifulSoup(pit_response.text, "html.parser", parse_only=SoupStrain
 teams_list = pit_soup.find_all('a')
 
 teams = {
-    int(re.search(r'/team/(\d+)/', str(team)).group(1)): re.search(r'>(\d+)<br/>(.*)</a>',
-    str(team)).group(2) for team in teams_list}
+    int(re.search(r'/team/(\d+)/', str(team)).group(1)): re.search(r'>(\d+)<br/>(.*)</a>', str(team)).group(2)
+    for team in teams_list}
 
-scouters = []
 
 @client.event
 async def on_ready():
@@ -32,6 +31,7 @@ async def on_ready():
 
 @client.command()
 async def scouters(ctx, arg):
+    global scouters
     scouters = arg.split(",")
     await ctx.send("Scouters Set!")
 
@@ -49,14 +49,14 @@ async def get_teams(ctx):
 
 
 @client.command
-async def assign_pit(ctx, arg):
+async def assign_pit(ctx):
     for scout in scouters:
         pass
     await ctx.send("Pit Scouting Schedule Set!")
 
 
 @client.command()
-async def assign_match(ctx, arg):
+async def assign_match(ctx):
     for scout in scouters:
         pass
     await ctx.send("Match Scouting Schedule Set!")
