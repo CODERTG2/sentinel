@@ -22,11 +22,14 @@ def fetch_teams():
     }
 
 
+teams = fetch_teams()
+
+
 async def get_teams(channel):
     """Command to get the list of teams"""
     client = importlib.import_module("main").client
 
-    team_items = list(fetch_teams().items())
+    team_items = list(teams.items())
     for i in range(0, len(team_items), 25):
         send_embed = MyEmbed(title=f"Teams at {constants.comp_code}", description="List of teams")
         for team_number, team_name in team_items[i:i + 25]:
@@ -40,16 +43,16 @@ async def add_team(channel, team):
     """Command to add a team to the list of teams"""
     client = importlib.import_module("main").client
     try:
-        team_number, team_name = team.split(",")
-        team_number = int(team_number)
+        team_info = team.split(",")
+        print(f"{team_info[0]}: {team_info[1]}")
+        team_number = int(team_info[0])
     except ValueError:
         await channel.send("Invalid team number! Please ensure the team number is an integer.")
         return
     except:
         await channel.send("Invalid Format! Please use the format `$addteam <team_number>,<team_name>`")
         return
-    teams = fetch_teams()
-    teams[team_number] = team_name
+    teams[team_number] = team_info[1]
     await channel.send("Team Added! Here is the new list of teams:")
     await get_teams(channel)
 
@@ -58,7 +61,6 @@ async def remove_team(channel, team_number: int):
     """Command to remove a team from the list of teams"""
     client = importlib.import_module("main").client
 
-    teams = fetch_teams()
     del teams[team_number]
     await channel.send("Team Removed! Here is the new list of teams:")
     await get_teams(channel)

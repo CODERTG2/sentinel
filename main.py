@@ -3,7 +3,7 @@ from discord.ext import commands
 
 import constants
 from scouters import set_scouters, assign
-from teams import fetch_teams, get_teams
+from teams import fetch_teams, get_teams, add_team, remove_team
 
 prefix = '$'
 
@@ -19,8 +19,11 @@ async def on_ready():
     """Event that triggers when the bot is ready to be used."""
     print("Bot Connected")  # Alert to notify login of bot
 
-client.add_command(commands.Command(set_scouters))
 client.add_command(commands.Command(get_teams))
+client.add_command(commands.Command(add_team))
+client.add_command(commands.Command(remove_team))
+
+client.add_command(commands.Command(set_scouters))
 client.add_command(commands.Command(assign))
 
 
