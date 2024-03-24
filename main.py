@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 import constants
-from scouters import set_scouters, assign_pit, assign_match
+from scouters import set_scouters, assign
 from teams import fetch_teams, get_teams
 
 prefix = '$'
@@ -21,8 +21,7 @@ async def on_ready():
 
 client.add_command(commands.Command(set_scouters))
 client.add_command(commands.Command(get_teams))
-client.add_command(commands.Command(assign_pit))
-client.add_command(commands.Command(assign_match))
+client.add_command(commands.Command(assign))
 
 
 @client.command()
