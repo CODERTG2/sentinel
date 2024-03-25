@@ -8,7 +8,7 @@ from teams import fetch_teams, get_teams, add_team, remove_team
 prefix = '$'
 
 client = commands.Bot(command_prefix=prefix, intents=discord.Intents.all())
-client.remove_command("help")
+# client.remove_command("help")
 client.command_prefix = prefix
 
 teams = fetch_teams()
