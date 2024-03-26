@@ -26,7 +26,17 @@ teams = fetch_teams()
 
 
 async def get_teams(channel):
-    """Command to get the list of teams"""
+    """
+    Command to get the list of teams
+
+    Expected format: $get_teams
+
+    Parameters:
+    channel (discord.Channel): The channel to send the message to.
+
+    Returns:
+    None
+    """
     client = importlib.import_module("main").client
 
     team_items = list(teams.items())
@@ -39,26 +49,40 @@ async def get_teams(channel):
         await channel.send(embed=send_embed)
 
 
-async def add_team(channel, team):
-    """Command to add a team to the list of teams"""
+async def add_team(channel, team_number: int, team_name: str):
+    """
+    Command to add a team to the list of teams
+
+    Expected format: $add_team <team_number>, <team_name>
+
+    Parameters:
+    channel (discord.Channel): The channel to send the message to.
+    team_number (int): The number of the team to add.
+    team_name (str): The name of the team to add.
+
+    Returns:
+    None
+    """
     client = importlib.import_module("main").client
-    try:
-        team_info = team.split(", ")
-        # print(f"{team_info[0]}: {team_info[1]}")
-        team_number = int(team_info[0])
-    except ValueError:
-        await channel.send("Invalid team number! Please ensure the team number is an integer.")
-        return
-    except:
-        await channel.send("Invalid Format! Please use the format `$addteam <team_number>,<team_name>`")
-        return
-    teams[team_number] = team_info[1]
+
+    teams[team_number] = team_name
     await channel.send("Team Added! Here is the new list of teams:")
     await get_teams(channel)
 
 
 async def remove_team(channel, team_number: int):
-    """Command to remove a team from the list of teams"""
+    """
+    Command to remove a team from the list of teams
+
+    Expected format: $remove_team <team_number>
+
+    Parameters:
+    channel (discord.Channel): The channel to send the message to.
+    team_number (int): The number of the team to remove.
+
+    Returns:
+    None
+    """
     client = importlib.import_module("main").client
 
     del teams[team_number]
