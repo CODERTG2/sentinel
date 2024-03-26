@@ -195,11 +195,60 @@ async def on_raw_reaction_add(payload):
         user = payload.member
         reaction = payload.emoji
 
-        print(f"Reaction added by user {payload.user_id} with emoji {payload.emoji}")
-
-        print(emoji_to_team)
         if str(reaction) in list(emoji_to_team.keys()):
-            print(f"In if statement - Reaction added by user {payload.user_id} with emoji {payload.emoji}")
             team_number = emoji_to_team[str(reaction)]
             pit_status[team_number] = "✅"
             await user.send(f"You have completed {team_number}")
+
+
+async def on_raw_reaction_remove(payload):
+    """
+    Event that triggers when a reaction is added to a message.
+
+    Parameters:
+    payload (discord.RawReactionActionEvent): The payload for the reaction event.
+
+    Returns:
+    None
+    """
+
+    client = importlib.import_module('main').client
+
+    reaction_embed_id = [embed.id for embed in reaction_embed]
+
+    if payload.message_id in reaction_embed_id:
+        user = payload.member
+        reaction = payload.emoji
+
+        if str(reaction) in list(emoji_to_team.keys()):
+            team_number = emoji_to_team[str(reaction)]
+            pit_status[team_number] = "❌"
+
+
+async def get_status(channel, scouting_type: str):
+    """
+    Messages the status of the pit scouting.
+
+    Expected format: $get_status <scouting_type>
+
+    Parameters:
+    channel (discord.Channel): The channel to send messages to.
+    scouting_type (str): The type of scouting. Can be either "pit" or "match".
+
+    Returns:
+    None
+    """
+    client = importlib.import_module('main').client
+
+    if scouting_type == "pit":
+        await channel.send("Pit Scouting Status:")
+        status_items = list(pit_status.items())
+        for i in range(0, len(status_items), 25):
+            send_embed = MyEmbed(title="Pit Scouting Status", description="Status of pit scouting")
+            for team, status in status_items[i:i + 25]:
+                send_embed.add_field(name=team, value=status, inline=False)
+            await channel.send(embed=send_embed)
+    elif scouting_type == "match":
+        pass
+    else:
+        await channel.send("Invalid Type of Scouting!")
