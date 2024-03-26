@@ -48,10 +48,10 @@ client.add_command(commands.Command(remove_team))
 
 client.add_command(commands.Command(set_scouters))
 client.add_command(commands.Command(assign))
-client.add_command(commands.Command(get_schedule))
-client.add_command(commands.Command(get_scouters))
 client.add_command(commands.Command(start))
 client.add_command(commands.Command(get_status))
+client.add_command(commands.Command(get_schedule))
+client.add_command(commands.Command(get_scouters))
 
 
 if __name__ == "__main__":
