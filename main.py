@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 import constants
-from scouters import set_scouters, assign, get_schedule, get_scouters
+from scouters import set_scouters, assign, get_schedule, get_scouters, start
 from teams import fetch_teams, get_teams, add_team, remove_team
 
 prefix = '$'
@@ -46,7 +46,7 @@ client.add_command(commands.Command(set_scouters))
 client.add_command(commands.Command(assign))
 client.add_command(commands.Command(get_schedule))
 client.add_command(commands.Command(get_scouters))
-
+client.add_command(commands.Command(start))
 
 if __name__ == "__main__":
     client.run(constants.botToken)
