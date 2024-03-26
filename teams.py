@@ -43,8 +43,8 @@ async def add_team(channel, team):
     """Command to add a team to the list of teams"""
     client = importlib.import_module("main").client
     try:
-        team_info = team.split(",")
-        print(f"{team_info[0]}: {team_info[1]}")
+        team_info = team.split(", ")
+        # print(f"{team_info[0]}: {team_info[1]}")
         team_number = int(team_info[0])
     except ValueError:
         await channel.send("Invalid team number! Please ensure the team number is an integer.")

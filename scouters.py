@@ -9,17 +9,30 @@ scouters = []
 
 
 async def set_scouters(channel, scouters_list: str):
-    """Sets the scouters for the competition"""
+    """
+    Sets the scouters for the competition
+
+    Expected format: $setscouters "<scouter1>, <scouter2>, <scouter3>, ..."
+
+    Parameters:
+    channel (discord.Channel): The channel to send messages to.
+    scouters_list (str): The list of scouters.
+
+    Returns:
+    None
+    """
     client = importlib.import_module('main').client
 
     global scouters
-    scouters = scouters_list.split(",")
+    scouters = scouters_list.split(", ")
     await channel.send("Scouters Set!")
 
 
 async def assign(channel, scouting_type: str):
     """
-    Assigns scouting to scouters based on the scouting type.
+    Assigns teams to scouters based on the scouting type.
+
+    Expected format: $assign <scouting_type>
 
     Parameters:
     channel (discord.Channel): The channel to send messages to.
@@ -55,7 +68,9 @@ async def assign(channel, scouting_type: str):
 
 async def get_schedule(channel, scouting_type: str):
     """
-    Gets the scouting schedule based on the scouting type.
+    Messages the scouting schedule for the scouting type.
+
+    Expected format: $getschedule <scouting_type>
 
     Parameters:
     channel (discord.Channel): The channel to send messages to.
@@ -82,7 +97,9 @@ async def get_schedule(channel, scouting_type: str):
 
 async def get_scouters(channel):
     """
-    Gets the list of scouters.
+    Messages the list of scouters.
+
+    Expected format: $getscouters
 
     Parameters:
     channel (discord.Channel): The channel to send messages to.
