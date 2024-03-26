@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 import constants
-from scouters import set_scouters, assign, get_schedule, get_scouters, start
+from scouters import set_scouters, assign, get_schedule, get_scouters, start, on_raw_reaction_add
 from teams import fetch_teams, get_teams, add_team, remove_team
 
 prefix = '$'
@@ -25,7 +25,7 @@ async def set_comp(ctx, competition_code: str):
     """
     Sets the competition code for the bot
 
-    Expected format: $setcomp <competition_code>
+    Expected format: $set_comp <competition_code>
 
     Parameters:
     ctx (discord.Context): The context of the command.
@@ -37,6 +37,7 @@ async def set_comp(ctx, competition_code: str):
     constants.comp_code = competition_code
     await ctx.send(f"Competition Code Set to {competition_code}")
 
+client.add_listener(on_raw_reaction_add, 'on_raw_reaction_add')
 
 client.add_command(commands.Command(get_teams))
 client.add_command(commands.Command(add_team))
@@ -47,6 +48,7 @@ client.add_command(commands.Command(assign))
 client.add_command(commands.Command(get_schedule))
 client.add_command(commands.Command(get_scouters))
 client.add_command(commands.Command(start))
+
 
 if __name__ == "__main__":
     client.run(constants.botToken)

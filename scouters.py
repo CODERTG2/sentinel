@@ -10,20 +10,25 @@ scouting_schedule = {}
 
 pairs = []
 scouters = []
-emojis = ["🙂", "😀", "😃", "😄", "😁", "😅", "😆", "🤣", "😂", "🙃", "😉", "😊", "😇", "😎", "🤓", "🧐", "🥳", "😜", "😝",
+emojis = [
+         "🙂", "😀", "😃", "😄", "😁", "😅", "😆", "🤣", "😂", "🙃", "😉", "😊", "😇", "😎", "🤓", "🧐", "🥳", "😜", "😝",
          "😛", "🤑", "🤠", "🥸", "😏", "😒", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣", "😖", "😫", "😩", "🥺", "😢", "😭",
          "😤", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤗", "🤔", "🤭", "🤫", "🤥", "😶",
          "😐", "😑", "😬", "🙄", "😯", "😦", "😧", "😮", "😲", "🥱", "😴", "🤤", "😪", "😵", "🤐", "🥴", "🤢", "🤮", "🤧",
          "😷", "🤒", "🤕", "🤑", "🤠", "🥸", "😏", "😒", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣", "😖", "😫", "😩", "🥺",
          "😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤗", "🤔", "🤭", "🤫",
-         "🤥", "😶", "😐", "😑", "😬", "🙄", "😯", "😦", "😧", "😮", "😲", "🥱", "😴", "🤤", "😪", "😵"]
+         "🤥", "😶", "😐", "😑", "😬", "🙄", "😯", "😦", "😧", "😮", "😲", "🥱", "😴", "🤤", "😪", "😵"
+]
+emoji_to_team = {}
+pit_status = {team_number: "❌" for team_number in teams.teams.keys()}
+reaction_embed = []
 
 
 async def set_scouters(channel, scouters_list: str):
     """
     Sets the scouters for the competition
 
-    Expected format: $setscouters "(<scouter1ID> <scouter2ID>) (<scouter3ID> ..."
+    Expected format: $set_scouters "(<scouter1ID> <scouter2ID>) (<scouter3ID> ..."
 
     Parameters:
     channel (discord.Channel): The channel to send messages to.
@@ -84,7 +89,7 @@ async def get_schedule(channel, scouting_type: str):
     """
     Messages the scouting schedule for the scouting type.
 
-    Expected format: $getschedule <scouting_type>
+    Expected format: $get_schedule <scouting_type>
 
     Parameters:
     channel (discord.Channel): The channel to send messages to.
@@ -113,7 +118,7 @@ async def get_scouters(channel):
     """
     Messages the list of scouters.
 
-    Expected format: $getscouters
+    Expected format: $get_scouters
 
     Parameters:
     channel (discord.Channel): The channel to send messages to.
@@ -155,15 +160,46 @@ async def start(channel, scouting_type: str, num_pairs: int):
                 assigned_teams = [team for team, assigned_scouters in scouting_schedule.items() if
                                   scouter in assigned_scouters]
             send_embed.add_field(name=pair, value=assigned_teams, inline=False)
+        global emoji_to_team
         emoji_to_team = {emoji: team for emoji, team in zip(emojis, assigned_teams)}
         emoji_keys = list(emoji_to_team.keys())
+        global reaction_embed
         for i in range(0, len(emoji_keys), 25):
             send_embed = MyEmbed(title="Current Scouting Pairs", description=f"Pairs and their assigned teams")
             for emoji in emoji_keys[i:i + 25]:
                 send_embed.add_field(name=emoji_to_team[emoji], value=emoji, inline=False)
-            await channel.send(embed=send_embed)
+            reaction_embed.append(await channel.send(embed=send_embed))
+        await channel.send("Good Luck! - https://forms.gle/kLEii5cAaoVD8Y9j9")
     elif scouting_type == "match":
         await channel.send("Match Scouting Started!")
     else:
         await channel.send("Invalid Type of Scouting!")
 
+
+async def on_raw_reaction_add(payload):
+    """
+    Event that triggers when a reaction is added to a message.
+
+    Parameters:
+    payload (discord.RawReactionActionEvent): The payload for the reaction event.
+
+    Returns:
+    None
+    """
+
+    client = importlib.import_module('main').client
+
+    reaction_embed_id = [embed.id for embed in reaction_embed]
+
+    if payload.message_id in reaction_embed_id:
+        user = payload.member
+        reaction = payload.emoji
+
+        print(f"Reaction added by user {payload.user_id} with emoji {payload.emoji}")
+
+        print(emoji_to_team)
+        if str(reaction) in list(emoji_to_team.keys()):
+            print(f"In if statement - Reaction added by user {payload.user_id} with emoji {payload.emoji}")
+            team_number = emoji_to_team[str(reaction)]
+            pit_status[team_number] = "✅"
+            await user.send(f"You have completed {team_number}")
