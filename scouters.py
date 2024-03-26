@@ -24,7 +24,7 @@ async def set_scouters(channel, scouters_list: str):
     client = importlib.import_module('main').client
 
     global scouters
-    scouters = scouters_list.split(", ")
+    scouters = scouters_list.split(" ")
     await channel.send("Scouters Set!")
 
 
