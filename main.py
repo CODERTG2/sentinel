@@ -3,7 +3,7 @@ from discord.ext import commands
 
 import constants
 from scouters import set_scouters, assign, get_schedule, get_scouters, start, on_raw_reaction_add, \
-    on_raw_reaction_remove, get_status
+    on_raw_reaction_remove, get_status, switch_scouter, remove_scouter, swap_pairs
 from teams import fetch_teams, get_teams, add_team, remove_team
 
 prefix = '$'
@@ -49,6 +49,9 @@ client.add_command(commands.Command(remove_team))
 client.add_command(commands.Command(set_scouters))
 client.add_command(commands.Command(assign))
 client.add_command(commands.Command(start))
+client.add_command(commands.Command(swap_pairs))
+client.add_command(commands.Command(switch_scouter))
+client.add_command(commands.Command(remove_scouter))
 client.add_command(commands.Command(get_status))
 client.add_command(commands.Command(get_schedule))
 client.add_command(commands.Command(get_scouters))

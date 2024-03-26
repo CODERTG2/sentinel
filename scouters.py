@@ -19,7 +19,6 @@ emojis = [
          "😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤗", "🤔", "🤭", "🤫",
          "🤥", "😶", "😐", "😑", "😬", "🙄", "😯", "😦", "😧", "😮", "😲", "🥱", "😴", "🤤", "😪", "😵"
 ]
-emoji_to_team = {}
 pit_status = {team_number: "❌" for team_number in teams.teams.keys()}
 reaction_embed = []
 
@@ -134,7 +133,10 @@ async def assign(channel, scouting_type: str):
         await channel.send("Invalid Type of Scouting!")
 
 
-async def start(channel, scouting_type: str, num_pairs: int):
+emoji_to_team = {emoji: team for emoji, team in zip(emojis, list(teams.teams.keys()))}
+
+
+async def start(channel, scouting_type: str, num_pairs: int, chosen_pairs: list = None):
     """
     Starts the scouting process.
 
@@ -153,29 +155,118 @@ async def start(channel, scouting_type: str, num_pairs: int):
     assigned_teams = []
 
     if scouting_type == "pit":
-        await channel.send("Pit Scouting Started!")
-        chosen_pairs = random.sample(scouters, num_pairs)
-        await channel.send(f"Chosen Pairs: {chosen_pairs}")
-        send_embed = MyEmbed(title="Current Scouting Pairs", description=f"Pairs and their assigned teams")
-        for pair in chosen_pairs:
-            for scouter in pair:
-                assigned_teams = [team for team, assigned_scouters in scouting_schedule.items() if
-                                  scouter in assigned_scouters]
-            send_embed.add_field(name=pair, value=assigned_teams, inline=False)
-        global emoji_to_team
-        emoji_to_team = {emoji: team for emoji, team in zip(emojis, assigned_teams)}
-        emoji_keys = list(emoji_to_team.keys())
-        global reaction_embed
-        for i in range(0, len(emoji_keys), 25):
-            send_embed = MyEmbed(title="Current Scouting Pairs", description=f"Pairs and their assigned teams")
-            for emoji in emoji_keys[i:i + 25]:
-                send_embed.add_field(name=emoji_to_team[emoji], value=emoji, inline=False)
-            reaction_embed.append(await channel.send(embed=send_embed))
-        await channel.send("Good Luck! - https://forms.gle/kLEii5cAaoVD8Y9j9")
+        if chosen_pairs is None:
+            await channel.send("Pit Scouting Started!")
+            chosen_pairs = random.sample(scouters, num_pairs)
+            await channel.send(f"Chosen Pairs: {chosen_pairs}")
+            send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
+            for pair in chosen_pairs:
+                for scouter in pair:
+                    assigned_teams = [team for team, assigned_scouters in scouting_schedule.items() if
+                                      scouter in assigned_scouters]
+                send_embed.add_field(name=pair, value=assigned_teams, inline=False)
+
+            assigned_emoji_to_team = {emoji: team for emoji, team in zip(emojis, assigned_teams)}
+
+            emoji_keys = list(assigned_emoji_to_team.keys())
+            global reaction_embed
+            for i in range(0, len(emoji_keys), 25):
+                send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
+                for emoji in emoji_keys[i:i + 25]:
+                    send_embed.add_field(name=assigned_emoji_to_team[emoji], value=emoji, inline=False)
+                reaction_embed.append(await channel.send(embed=send_embed))
+            await channel.send("Good Luck! - https://forms.gle/kLEii5cAaoVD8Y9j9")
+        else:
+            await channel.send("Pit Scouting Started!")
+            await channel.send(f"Chosen Pairs: {chosen_pairs}")
+            send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
+            for pair in chosen_pairs:
+                for scouter in pair:
+                    assigned_teams = [team for team, assigned_scouters in scouting_schedule.items() if
+                                      scouter in assigned_scouters]
+                send_embed.add_field(name=pair, value=assigned_teams, inline=False)
+
+            assigned_emoji_to_team = {emoji: team for emoji, team in zip(emojis, assigned_teams)}
+
+            emoji_keys = list(assigned_emoji_to_team.keys())
+            global reaction_embed
+            for i in range(0, len(emoji_keys), 25):
+                send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
+                for emoji in emoji_keys[i:i + 25]:
+                    send_embed.add_field(name=assigned_emoji_to_team[emoji], value=emoji, inline=False)
+                reaction_embed.append(await channel.send(embed=send_embed))
+            await channel.send("Good Luck! - https://forms.gle/kLEii5cAaoVD8Y9j9")
     elif scouting_type == "match":
         await channel.send("Match Scouting Started!")
     else:
         await channel.send("Invalid Type of Scouting!")
+
+
+async def swap_pairs(channel, old_pair: str, new_pair: str):
+    """
+    Swaps the scouters in the pairs.
+
+    Expected format: $swap_pairs <pair1> <pair2>
+
+    Parameters:
+    channel (discord.Channel): The channel to send messages to.
+    pair1 (str): The first pair to swap.
+    pair2 (str): The second pair to swap.
+
+    Returns:
+    None
+    """
+    client = importlib.import_module('main').client
+
+    await start(channel, "pit", 1, [new_pair])
+
+
+async def switch_scouter(channel, scouter1: str, scouter2: str):
+    """
+    Switches the scouters.
+
+    Expected format: $switch_scouters <scouter1> <scouter2>
+
+    Parameters:
+    channel (discord.Channel): The channel to send messages to.
+    scouter1 (str): The first scouter to switch.
+    scouter2 (str): The second scouter to switch.
+
+    Returns:
+    None
+    """
+    client = importlib.import_module('main').client
+
+    for team, scouter in scouting_schedule.items():
+        if scouter == scouter1:
+            scouting_schedule[team] = scouter2
+        elif scouter == scouter2:
+            scouting_schedule[team] = scouter1
+
+    await channel.send(f"Scouters {scouter1} and {scouter2} have been switched!")
+
+
+async def remove_scouter(channel, old_scouter: str, new_scouter: str):
+    """
+    Removes a scouter and replaces them with another scouter.
+
+    Expected format: $remove_scouter <removeScouter> <replaceScouter>
+
+    Parameters:
+    channel (discord.Channel): The channel to send messages to.
+    removeScouter (str): The scouter to remove.
+    replaceScouter (str): The scouter to replace the removed scouter with.
+
+    Returns:
+    None
+    """
+    client = importlib.import_module('main').client
+
+    for team, scouter in scouting_schedule.items():
+        if scouter == old_scouter:
+            scouting_schedule[team] = new_scouter
+
+    await channel.send(f"Scouter {old_scouter} has been removed and replaced with {new_scouter}!")
 
 
 async def get_status(channel, scouting_type: str):
