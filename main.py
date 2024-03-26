@@ -19,6 +19,13 @@ async def on_ready():
     """Event that triggers when the bot is ready to be used."""
     print("Bot Connected")  # Alert to notify login of bot
 
+
+@client.command()
+async def set_comp(ctx, arg):
+    constants.comp_code = arg
+    await ctx.send(f"Competition Code Set to {arg}")
+
+
 client.add_command(commands.Command(get_teams))
 client.add_command(commands.Command(add_team))
 client.add_command(commands.Command(remove_team))
