@@ -21,6 +21,7 @@ emojis = [
 ]
 pit_status = {team_number: "❌" for team_number in teams.teams.keys()}
 reaction_embed = []
+in_pit = []
 
 
 async def on_raw_reaction_add(payload):
@@ -162,6 +163,7 @@ async def start(channel, scouting_type: str, num_pairs: int, chosen_pairs: list 
             await channel.send(f"Chosen Pairs: {chosen_pairs}")
             send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
             for pair in chosen_pairs:
+                in_pit.append(pair)
                 for scouter in pair:
                     assigned_teams = [team for team, assigned_scouters in scouting_schedule.items() if
                                       scouter in assigned_scouters]
@@ -181,6 +183,7 @@ async def start(channel, scouting_type: str, num_pairs: int, chosen_pairs: list 
             await channel.send(f"Chosen Pairs: {chosen_pairs}")
             send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
             for pair in chosen_pairs:
+                in_pit.append(pair)
                 for scouter in pair:
                     assigned_teams = [team for team, assigned_scouters in scouting_schedule.items() if
                                       scouter in assigned_scouters]
@@ -217,6 +220,7 @@ async def swap_pairs(channel, old_pair: str, new_pair: str):
     """
     client = importlib.import_module('main').client
 
+    in_pit.remove(old_pair)
     await start(channel, "pit", 1, [new_pair])
 
 
@@ -297,6 +301,23 @@ async def get_status(channel, scouting_type: str):
         pass
     else:
         await channel.send("Invalid Type of Scouting!")
+
+
+async def scouts_in_pit(channel):
+    """
+    Messages the scouters in the pit.
+
+    Expected format: $scouts_in_pit
+
+    Parameters:
+    channel (discord.Channel): The channel to send messages to.
+
+    Returns:
+    None
+    """
+    client = importlib.import_module('main').client
+
+    await channel.send(f"Scouters in Pit: {in_pit}")
 
 
 async def get_schedule(channel, scouting_type: str):
