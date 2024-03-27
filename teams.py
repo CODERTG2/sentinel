@@ -38,15 +38,16 @@ async def get_teams(channel):
     None
     """
     client = importlib.import_module("main").client
-
-    team_items = list(teams.items())
-    for i in range(0, len(team_items), 25):
-        send_embed = MyEmbed(title=f"Teams at {constants.comp_code}", description="List of teams")
-        for team_number, team_name in team_items[i:i + 25]:
-            if len(team_name) > 1024:
-                team_name = team_name[:1021] + "..."
-            send_embed.add_field(name=team_number, value=team_name, inline=False)
-        await channel.send(embed=send_embed)
+    send_embed = MyEmbed(title=f"Teams at {constants.comp_code}", description="List of teams")
+    await send_embed.my_add_field(key_value=teams, channel=channel, inline=False)
+    # team_items = list(teams.items())
+    # for i in range(0, len(team_items), 25):
+    #     send_embed = MyEmbed(title=f"Teams at {constants.comp_code}", description="List of teams")
+    #     for team_number, team_name in team_items[i:i + 25]:
+    #         if len(team_name) > 1024:
+    #             team_name = team_name[:1021] + "..."
+    #         send_embed.add_field(name=team_number, value=team_name, inline=False)
+    #     await channel.send(embed=send_embed)
 
 
 async def add_team(channel, team_number: int, team_name: str):

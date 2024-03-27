@@ -38,6 +38,7 @@ async def set_comp(ctx, competition_code: str):
     constants.comp_code = competition_code
     await ctx.send(f"Competition Code Set to {competition_code}")
 
+
 client.add_listener(on_raw_reaction_add, 'on_raw_reaction_add')
 client.add_listener(on_raw_reaction_remove, 'on_raw_reaction_remove')
 

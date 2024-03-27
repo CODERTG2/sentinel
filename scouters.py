@@ -117,13 +117,14 @@ async def assign(channel, scouting_type: str):
             scouter = next(scouters_cycle)
             scouting_schedule[team] = scouter
         await channel.send("Pit Scouting Schedule Set! Here is the schedule:")
-
-        schedule_items = list(scouting_schedule.items())
-        for i in range(0, len(schedule_items), 25):
-            send_embed = MyEmbed(title="Pit Scouting Schedule", description="List of scouters and their assigned teams")
-            for scouter, team in schedule_items[i:i + 25]:
-                send_embed.add_field(name=scouter, value=team, inline=False)
-            await channel.send(embed=send_embed)
+        send_embed = MyEmbed(title="Pit Scouting Schedule", description="List of scouters and their assigned teams")
+        await send_embed.my_add_field(key_value=scouting_schedule, channel=channel, inline=False)
+        # schedule_items = list(scouting_schedule.items())
+        # for i in range(0, len(schedule_items), 25):
+        #     send_embed = MyEmbed(title="Pit Scouting Schedule", description="List of scouters and their assigned teams")
+        #     for scouter, team in schedule_items[i:i + 25]:
+        #         send_embed.add_field(name=scouter, value=team, inline=False)
+        #     await channel.send(embed=send_embed)
 
     elif scouting_type == "match":
         for scout in scouters:
@@ -169,7 +170,6 @@ async def start(channel, scouting_type: str, num_pairs: int, chosen_pairs: list 
             assigned_emoji_to_team = {emoji: team for emoji, team in zip(emojis, assigned_teams)}
 
             emoji_keys = list(assigned_emoji_to_team.keys())
-            global reaction_embed
             for i in range(0, len(emoji_keys), 25):
                 send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
                 for emoji in emoji_keys[i:i + 25]:
@@ -189,7 +189,6 @@ async def start(channel, scouting_type: str, num_pairs: int, chosen_pairs: list 
             assigned_emoji_to_team = {emoji: team for emoji, team in zip(emojis, assigned_teams)}
 
             emoji_keys = list(assigned_emoji_to_team.keys())
-            global reaction_embed
             for i in range(0, len(emoji_keys), 25):
                 send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
                 for emoji in emoji_keys[i:i + 25]:
@@ -286,12 +285,14 @@ async def get_status(channel, scouting_type: str):
 
     if scouting_type == "pit":
         await channel.send("Pit Scouting Status:")
-        status_items = list(pit_status.items())
-        for i in range(0, len(status_items), 25):
-            send_embed = MyEmbed(title="Pit Scouting Status", description="Status of pit scouting")
-            for team, status in status_items[i:i + 25]:
-                send_embed.add_field(name=team, value=status, inline=False)
-            await channel.send(embed=send_embed)
+        send_embed = MyEmbed(title="Pit Scouting Status", description="Status of pit scouting")
+        await send_embed.my_add_field(key_value=pit_status, channel=channel, inline=False)
+        # status_items = list(pit_status.items())
+        # for i in range(0, len(status_items), 25):
+        #     send_embed = MyEmbed(title="Pit Scouting Status", description="Status of pit scouting")
+        #     for team, status in status_items[i:i + 25]:
+        #         send_embed.add_field(name=team, value=status, inline=False)
+        #     await channel.send(embed=send_embed)
     elif scouting_type == "match":
         pass
     else:
@@ -315,12 +316,8 @@ async def get_schedule(channel, scouting_type: str):
 
     if scouting_type == "pit":
         await channel.send("Pit Scouting Schedule:")
-        schedule_items = list(scouting_schedule.items())
-        for i in range(0, len(schedule_items), 25):
-            send_embed = MyEmbed(title="Pit Scouting Schedule", description="List of scouters and their assigned teams")
-            for scouter, team in schedule_items[i:i + 25]:
-                send_embed.add_field(name=scouter, value=team, inline=False)
-            await channel.send(embed=send_embed)
+        send_embed = MyEmbed(title="Pit Scouting Schedule", description="List of scouters and their assigned teams")
+        await send_embed.my_add_field(key_value=scouting_schedule, channel=channel,inline=False)
     elif scouting_type == "match":
         await channel.send("Match Scouting Schedule:")
     else:
