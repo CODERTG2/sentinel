@@ -120,12 +120,6 @@ async def assign(channel, scouting_type: str):
         await channel.send("Pit Scouting Schedule Set! Here is the schedule:")
         send_embed = MyEmbed(title="Pit Scouting Schedule", description="List of scouters and their assigned teams")
         await send_embed.my_add_field(key_value=scouting_schedule, channel=channel, inline=False)
-        # schedule_items = list(scouting_schedule.items())
-        # for i in range(0, len(schedule_items), 25):
-        #     send_embed = MyEmbed(title="Pit Scouting Schedule", description="List of scouters and their assigned teams")
-        #     for scouter, team in schedule_items[i:i + 25]:
-        #         send_embed.add_field(name=scouter, value=team, inline=False)
-        #     await channel.send(embed=send_embed)
 
     elif scouting_type == "match":
         for scout in scouters:
@@ -338,7 +332,7 @@ async def get_schedule(channel, scouting_type: str):
     if scouting_type == "pit":
         await channel.send("Pit Scouting Schedule:")
         send_embed = MyEmbed(title="Pit Scouting Schedule", description="List of scouters and their assigned teams")
-        await send_embed.my_add_field(key_value=scouting_schedule, channel=channel,inline=False)
+        await send_embed.my_add_field(key_value=scouting_schedule, channel=channel, inline=False)
     elif scouting_type == "match":
         await channel.send("Match Scouting Schedule:")
     else:
