@@ -1,8 +1,8 @@
+import importlib
 import re
 
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
-import importlib
 
 import constants
 from MyEmbed import MyEmbed
