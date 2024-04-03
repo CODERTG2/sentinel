@@ -77,7 +77,7 @@ async def set_scouters(channel, scouters_list: str):
     """
     Sets the scouters for the competition
 
-    Expected format: $set_scouters "(<scouter1ID> <scouter2ID>) (<scouter3ID> ..."
+    Expected format: $set_scouters "(<scouter1ID> <scouter2ID>) (<scouter3ID> <scouter4ID>) ..."
 
     Parameters:
     channel (discord.Channel): The channel to send messages to.
@@ -117,6 +117,7 @@ async def assign(channel, scouting_type: str):
         for team in list(teams.teams.keys()):
             scouter = next(scouters_cycle)
             scouting_schedule[team] = scouter
+            
         await channel.send("Pit Scouting Schedule Set! Here is the schedule:")
         send_embed = MyEmbed(title="Pit Scouting Schedule", description="List of scouters and their assigned teams")
         await send_embed.my_add_field(key_value=scouting_schedule, channel=channel, inline=False)
