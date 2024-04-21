@@ -1,2 +1,2 @@
 # scout-bot
-Bot for scouting at FRC competitions.
+[WIP] Bot for scouting at FRC competitions.
