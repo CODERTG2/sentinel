@@ -12,9 +12,14 @@ url = f"https://www.thebluealliance.com/event/{constants.comp_code}#teams"
 
 def fetch_teams():
     """Function to fetch the teams from the Blue Alliance"""
-    pit_response = requests.get(url, headers={"X-TBA-Auth-Key": constants.blueAllianceToken})
-    pit_soup = BeautifulSoup(pit_response.text, "html.parser", parse_only=SoupStrainer('div', class_='team-name'))
-    teams_list = pit_soup.find_all('a')
+    try:
+        pit_response = requests.get(url, headers={"X-TBA-Auth-Key": constants.blueAllianceToken})
+        pit_soup = BeautifulSoup(pit_response.text, "html.parser", parse_only=SoupStrainer('div', class_='team-name'))
+        teams_list = pit_soup.find_all('a')
+    except Exception as e:
+        return {0: f"Error fetching teams: {e}",
+                1: "Please try again",
+                2: "If the issue persists, raise an issue on GitHub"}
 
     return {
         int(re.search(r'/team/(\d+)/', str(team)).group(1)): re.search(r'>(\d+)<br/>(.*)</a>', str(team)).group(2)
