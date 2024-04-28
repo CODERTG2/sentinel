@@ -1,5 +1,5 @@
-# scout-bot
-[WIP] Bot for scouting at FRC competitions.
+# sentinel
+[WIP] Discord bot for scouting at FRC competitions.
 
 -Axiom 4787
 
