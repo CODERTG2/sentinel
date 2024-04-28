@@ -1,5 +1,5 @@
 # scout-bot
-[WIP] Bot for scouting at FRC competitions. Pit scouting code is complete.
+[WIP] Bot for scouting at FRC competitions.
 
 # Usage
 1. You can clone this repo and make changes to better fit your team - suggested
