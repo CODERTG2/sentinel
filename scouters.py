@@ -165,41 +165,41 @@ async def start(channel, scouting_type: str, num_pairs: int, chosen_pairs: list 
             await channel.send("Pit Scouting Started!")
             chosen_pairs = random.sample(scouters, num_pairs)
             await channel.send(f"Chosen Pairs: {chosen_pairs}")
-            send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
+            msg_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
             for pair in chosen_pairs:
                 in_pit.append(pair)
                 for scouter in pair:
                     assigned_teams = [team for team, assigned_scouters in scouting_schedule.items() if
                                       scouter in assigned_scouters]
-                send_embed.add_field(name=pair, value=assigned_teams, inline=False)
+                msg_embed.add_field(name=pair, value=assigned_teams, inline=False)
 
             assigned_emoji_to_team = {emoji: team for emoji, team in zip(emojis, assigned_teams)}
 
             emoji_keys = list(assigned_emoji_to_team.keys())
             for i in range(0, len(emoji_keys), 25):
-                send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
+                msg_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
                 for emoji in emoji_keys[i:i + 25]:
-                    send_embed.add_field(name=assigned_emoji_to_team[emoji], value=emoji, inline=False)
-                reaction_embed.append(await channel.send(embed=send_embed))
+                    msg_embed.add_field(name=assigned_emoji_to_team[emoji], value=emoji, inline=False)
+                reaction_embed.append(await channel.send(embed=msg_embed))
             await channel.send("Good Luck! - https://forms.gle/kLEii5cAaoVD8Y9j9")
         else:
             await channel.send("Pit Scouting Started!")
             await channel.send(f"Chosen Pairs: {chosen_pairs}")
-            send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
+            msg_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
             for pair in chosen_pairs:
                 in_pit.append(pair)
                 for scouter in pair:
                     assigned_teams = [team for team, assigned_scouters in scouting_schedule.items() if
                                       scouter in assigned_scouters]
-                send_embed.add_field(name=pair, value=assigned_teams, inline=False)
+                msg_embed.add_field(name=pair, value=assigned_teams, inline=False)
 
             assigned_emoji_to_team = {emoji: team for emoji, team in zip(emojis, assigned_teams)}
 
             emoji_keys = list(assigned_emoji_to_team.keys())
             for i in range(0, len(emoji_keys), 25):
-                send_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
+                msg_embed = MyEmbed(title="Current Scouting Pairs", description="Pairs and their assigned teams")
                 for emoji in emoji_keys[i:i + 25]:
-                    send_embed.add_field(name=assigned_emoji_to_team[emoji], value=emoji, inline=False)
+                    msg_embed.add_field(name=assigned_emoji_to_team[emoji], value=emoji, inline=False)
                 reaction_embed.append(await channel.send(embed=send_embed))
             await channel.send("Good Luck! - https://forms.gle/kLEii5cAaoVD8Y9j9")
     elif scouting_type == "match":
