@@ -14,11 +14,14 @@ client.command_prefix = prefix
 
 teams = fetch_teams()
 
+# TODO: better error handling in general
 
 @client.event
 async def on_ready():
     """Event that triggers when the bot is ready to be used."""
     print("Bot Connected")  # Alert to notify login of bot
+
+# TODO: set a cooler help command and create categories.
 
 
 @client.command()

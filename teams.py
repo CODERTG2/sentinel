@@ -42,9 +42,12 @@ async def get_teams(channel):
     Returns:
     None
     """
+
+    # TODO: fix spacing when inline True -- probably need to handle the string input better
+
     client = importlib.import_module("main").client
     send_embed = MyEmbed(title=f"Teams at {constants.comp_code}", description="List of teams")
-    await send_embed.my_add_field(key_value=teams, channel=channel, inline=False)
+    await send_embed.my_add_field(key_value=teams, channel=channel, inline=True)
     # team_items = list(teams.items())
     # for i in range(0, len(team_items), 25):
     #     send_embed = MyEmbed(title=f"Teams at {constants.comp_code}", description="List of teams")
